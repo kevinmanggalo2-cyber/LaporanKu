@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LaporanKu - Laporan Keuangan Harian</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    
+    <!-- Anime.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Special+Elite&display=swap');
+        
+        * {
+            font-family: 'Special Elite', cursive;
+        }
+        
+        :root {
+            --primary-green: #73AF6F;
+            --primary-cream: #E7DEAF;
+            --dark-green: #5a8e57;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--primary-cream) 0%, #f5f5dc 100%);
+            min-height: 100vh;
+            padding: 20px 0;
+        }
+        
+        .main-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        .header {
+            background: var(--primary-green);
+            color: white;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .header p {
+            margin: 10px 0 0 0;
+            opacity: 0.9;
+        }
+        
+        .card-custom {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            border: 2px solid var(--primary-cream);
+        }
+        
+        .btn-primary-custom {
+            background: var(--primary-green);
+            border: none;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary-custom:hover {
+            background: var(--dark-green);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        .btn-danger-custom {
+            background: #dc3545;
+            border: none;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        
+        .btn-danger-custom:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+        }
+        
+        .form-control, .form-select {
+            border: 2px solid var(--primary-cream);
+            border-radius: 10px;
+            padding: 12px;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-green);
+            box-shadow: 0 0 0 0.2rem rgba(115, 175, 111, 0.25);
+        }
+        
+        .laporan-item {
+            background: #f8f9fa;
+            border-left: 5px solid var(--primary-green);
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            transition: all 0.3s;
+        }
+        
+        .laporan-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .laporan-pemasukan {
+            border-left-color: #28a745;
+        }
+        
+        .laporan-pengeluaran {
+            border-left-color: #dc3545;
+        }
+        
+        .badge-pemasukan {
+            background: #28a745;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
+        
+        .badge-pengeluaran {
+            background: #dc3545;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
+        
+        .summary-card {
+            background: linear-gradient(135deg, var(--primary-green), var(--dark-green));
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        
+        .summary-card h3 {
+            margin: 0;
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .summary-card .amount {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        
+        .nav-tabs {
+            border: none;
+            margin-bottom: 20px;
+        }
+        
+        .nav-tabs .nav-link {
+            border: 2px solid var(--primary-cream);
+            border-radius: 10px;
+            margin-right: 10px;
+            color: var(--primary-green);
+            font-weight: bold;
+        }
+        
+        .nav-tabs .nav-link.active {
+            background: var(--primary-green);
+            color: white;
+            border-color: var(--primary-green);
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #6c757d;
+        }
+        
+        .empty-state i {
+            font-size: 4rem;
+            opacity: 0.3;
+            margin-bottom: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .summary-card .amount {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <!-- Header -->
+        <div class="header" id="header">
+            <h1><i class="bi bi-journal-text"></i> LaporanKu</h1>
+            <p>Catat Keuangan Harianmu dengan Mudah</p>
+        </div>
+        
+        <!-- Navigation Tabs -->
+        <ul class="nav nav-tabs" id="mainTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="tambah-tab" data-bs-toggle="tab" data-bs-target="#tambah" type="button">
+                    <i class="bi bi-plus-circle"></i> Tambah Laporan
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="riwayat-tab" data-bs-toggle="tab" data-bs-target="#riwayat" type="button">
+                    <i class="bi bi-clock-history"></i> Riwayat
+                </button>
+            </li>
+        </ul>
+        
+        <div class="tab-content" id="mainTabContent">
+            <!-- Tab Tambah Laporan -->
+            <div class="tab-pane fade show active" id="tambah" role="tabpanel">
+                <!-- Summary Cards -->
+                <div class="row mb-4" id="summaryCards">
+                    <div class="col-md-4 mb-3">
+                        <div class="summary-card">
+                            <h3>Total Pemasukan</h3>
+                            <div class="amount" id="totalPemasukan">Rp 0</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="summary-card" style="background: linear-gradient(135deg, #dc3545, #c82333);">
+                            <h3>Total Pengeluaran</h3>
+                            <div class="amount" id="totalPengeluaran">Rp 0</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="summary-card" style="background: linear-gradient(135deg, #ffc107, #ff9800);">
+                            <h3>Saldo</h3>
+                            <div class="amount" id="saldo">Rp 0</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Form Tambah Laporan -->
+                <div class="card-custom" id="formCard">
+                    <h3 class="mb-4"><i class="bi bi-pencil-square"></i> Form Laporan Keuangan</h3>
+                    <form id="laporanForm">
+                        <div class="mb-3">
+                            <label class="form-label">Jenis Transaksi</label>
+                            <select class="form-select" id="jenisTransaksi" required>
+                                <option value="">Pilih jenis...</option>
+                                <option value="pemasukan">Pemasukan</option>
+                                <option value="pengeluaran">Pengeluaran</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Jumlah (Rp)</label>
+                            <input type="number" class="form-control" id="jumlah" placeholder="Masukkan jumlah..." required min="0">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Kategori</label>
+                            <input type="text" class="form-control" id="kategori" placeholder="Contoh: Gaji, Makan, Transport..." required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Keterangan</label>
+                            <textarea class="form-control" id="keterangan" rows="3" placeholder="Tambahkan keterangan (opsional)"></textarea>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Tanggal</label>
+                            <input type="date" class="form-control" id="tanggal" required>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary-custom w-100">
+                            <i class="bi bi-save"></i> Simpan Laporan
+                        </button>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Tab Riwayat -->
+            <div class="tab-pane fade" id="riwayat" role="tabpanel">
+                <div class="card-custom">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h3><i class="bi bi-list-ul"></i> Daftar Riwayat Laporan</h3>
+                        <button class="btn btn-danger-custom" onclick="hapusSemuaLaporan()">
+                            <i class="bi bi-trash"></i> Hapus Semua
+                        </button>
+                    </div>
+                    
+                    <div id="filterButtons" class="mb-3">
+                        <button class="btn btn-sm btn-outline-secondary me-2" onclick="filterLaporan('semua')">Semua</button>
+                        <button class="btn btn-sm btn-outline-success me-2" onclick="filterLaporan('pemasukan')">Pemasukan</button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="filterLaporan('pengeluaran')">Pengeluaran</button>
+                    </div>
+                    
+                    <div id="daftarLaporan"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Set tanggal hari ini sebagai default
+        document.getElementById('tanggal').valueAsDate = new Date();
+        
+        let currentFilter = 'semua';
+        
+        // Animasi header saat load
+        anime({
+            targets: '#header',
+            translateY: [-50, 0],
+            opacity: [0, 1],
+            duration: 1000,
+            easing: 'easeOutExpo'
+        });
+        
+        // Animasi summary cards
+        anime({
+            targets: '#summaryCards .summary-card',
+            scale: [0.8, 1],
+            opacity: [0, 1],
+            delay: anime.stagger(100),
+            duration: 800,
+            easing: 'easeOutElastic(1, .8)'
+        });
+        
+        // Animasi form card
+        anime({
+            targets: '#formCard',
+            translateX: [-100, 0],
+            opacity: [0, 1],
+            duration: 800,
+            delay: 300,
+            easing: 'easeOutExpo'
+        });
+        
+        // Fungsi untuk mendapatkan data dari localStorage
+        function getLaporan() {
+            const data = localStorage.getItem('laporanKeuangan');
+            return data ? JSON.parse(data) : [];
+        }
+        
+        // Fungsi untuk menyimpan data ke localStorage
+        function saveLaporan(laporan) {
+            localStorage.setItem('laporanKeuangan', JSON.stringify(laporan));
+        }
+        
+        // Fungsi format rupiah
+        function formatRupiah(angka) {
+            return new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                minimumFractionDigits: 0
+            }).format(angka);
+        }
+        
+        // Fungsi format tanggal
+        function formatTanggal(tanggal) {
+            const options = { day: 'numeric', month: 'long', year: 'numeric' };
+            return new Date(tanggal).toLocaleDateString('id-ID', options);
+        }
+        
+        // Fungsi update summary
+        function updateSummary() {
+            const laporan = getLaporan();
+            let totalPemasukan = 0;
+            let totalPengeluaran = 0;
+            
+            laporan.forEach(item => {
+                if (item.jenis === 'pemasukan') {
+                    totalPemasukan += item.jumlah;
+                } else {
+                    totalPengeluaran += item.jumlah;
+                }
+            });
+            
+            const saldo = totalPemasukan - totalPengeluaran;
+            
+            document.getElementById('totalPemasukan').textContent = formatRupiah(totalPemasukan);
+            document.getElementById('totalPengeluaran').textContent = formatRupiah(totalPengeluaran);
+            document.getElementById('saldo').textContent = formatRupiah(saldo);
+            
+            // Animasi angka berubah
+            anime({
+                targets: '.amount',
+                scale: [1.2, 1],
+                duration: 500,
+                easing: 'easeOutElastic(1, .6)'
+            });
+        }
+        
+        // Fungsi tampilkan riwayat
+        function tampilkanRiwayat() {
+            const laporan = getLaporan();
+            const container = document.getElementById('daftarLaporan');
+            
+            let filteredLaporan = laporan;
+            if (currentFilter !== 'semua') {
+                filteredLaporan = laporan.filter(item => item.jenis === currentFilter);
+            }
+            
+            if (filteredLaporan.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="bi bi-inbox"></i>
+                        <p>Belum ada laporan keuangan</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Urutkan berdasarkan tanggal terbaru
+            filteredLaporan.sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal));
+            
+            container.innerHTML = filteredLaporan.map((item, index) => `
+                <div class="laporan-item laporan-${item.jenis}" data-index="${laporan.indexOf(item)}">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div class="flex-grow-1">
+                            <div class="d-flex align-items-center mb-2">
+                                <span class="badge badge-${item.jenis} me-2">
+                                    ${item.jenis === 'pemasukan' ? '<i class="bi bi-arrow-down-circle"></i>' : '<i class="bi bi-arrow-up-circle"></i>'}
+                                    ${item.jenis.toUpperCase()}
+                                </span>
+                                <strong>${item.kategori}</strong>
+                            </div>
+                            <h4 class="mb-2">${formatRupiah(item.jumlah)}</h4>
+                            ${item.keterangan ? `<p class="mb-2 text-muted">${item.keterangan}</p>` : ''}
+                            <small class="text-muted">
+                                <i class="bi bi-calendar"></i> ${formatTanggal(item.tanggal)}
+                            </small>
+                        </div>
+                        <button class="btn btn-danger-custom btn-sm" onclick="hapusLaporan(${laporan.indexOf(item)})">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+            
+            // Animasi item muncul
+            anime({
+                targets: '.laporan-item',
+                translateX: [100, 0],
+                opacity: [0, 1],
+                delay: anime.stagger(50),
+                duration: 600,
+                easing: 'easeOutExpo'
+            });
+        }
+        
+        // Fungsi filter laporan
+        function filterLaporan(jenis) {
+            currentFilter = jenis;
+            tampilkanRiwayat();
+            
+            // Update tombol aktif
+            document.querySelectorAll('#filterButtons button').forEach(btn => {
+                btn.classList.remove('btn-primary-custom');
+                btn.classList.add('btn-outline-secondary');
+            });
+            event.target.classList.remove('btn-outline-secondary', 'btn-outline-success', 'btn-outline-danger');
+            event.target.classList.add('btn-primary-custom');
+        }
+        
+        // Handle submit form
+        document.getElementById('laporanForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const laporan = getLaporan();
+            const newLaporan = {
+                id: Date.now(),
+                jenis: document.getElementById('jenisTransaksi').value,
+                jumlah: parseInt(document.getElementById('jumlah').value),
+                kategori: document.getElementById('kategori').value,
+                keterangan: document.getElementById('keterangan').value,
+                tanggal: document.getElementById('tanggal').value
+            };
+            
+            laporan.push(newLaporan);
+            saveLaporan(laporan);
+            
+            // Animasi sukses
+            anime({
+                targets: '#formCard',
+                scale: [1, 0.95, 1],
+                duration: 400,
+                easing: 'easeInOutQuad'
+            });
+            
+            // Reset form
+            this.reset();
+            document.getElementById('tanggal').valueAsDate = new Date();
+            
+            // Update tampilan
+            updateSummary();
+            tampilkanRiwayat();
+            
+            // Notifikasi
+            alert('✅ Laporan berhasil disimpan!');
+        });
+        
+        // Fungsi hapus laporan
+        function hapusLaporan(index) {
+            if (confirm('Yakin ingin menghapus laporan ini?')) {
+                const laporan = getLaporan();
+                
+                // Animasi hapus
+                const element = document.querySelector(`[data-index="${index}"]`);
+                anime({
+                    targets: element,
+                    translateX: [0, 100],
+                    opacity: [1, 0],
+                    duration: 400,
+                    easing: 'easeInQuad',
+                    complete: function() {
+                        laporan.splice(index, 1);
+                        saveLaporan(laporan);
+                        updateSummary();
+                        tampilkanRiwayat();
+                    }
+                });
+            }
+        }
+        
+        // Fungsi hapus semua laporan
+        function hapusSemuaLaporan() {
+            if (confirm('⚠️ Yakin ingin menghapus SEMUA laporan? Tindakan ini tidak dapat dibatalkan!')) {
+                localStorage.removeItem('laporanKeuangan');
+                updateSummary();
+                tampilkanRiwayat();
+                alert('✅ Semua laporan berhasil dihapus!');
+            }
+        }
+        
+        // Load data saat halaman dibuka
+        updateSummary();
+        tampilkanRiwayat();
+        
+        // Update tampilan saat tab berubah
+        document.getElementById('riwayat-tab').addEventListener('shown.bs.tab', function() {
+            tampilkanRiwayat();
+        });
+    </script>
+</body>
+</html>
